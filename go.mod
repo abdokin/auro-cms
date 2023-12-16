@@ -5,6 +5,7 @@ go 1.21.5
 require gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 
 require (
+	github.com/a-h/templ v0.2.476 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-jwt/jwt/v5 v5.0.0 // indirect
 	github.com/labstack/echo-jwt/v4 v4.2.0 // indirect

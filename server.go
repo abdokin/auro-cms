@@ -7,9 +7,16 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	"gopkg.in/mgo.v2"
+	"auro-cms/views"
+	"context"
+	"os"
 )
 
 func main() {
+	component := views.HelloView("Hello World");
+	component.Render(context.Background(), os.Stdout)
+}
+func main2() {
 	e := echo.New()
 	e.Logger.SetLevel(log.ERROR)
 	e.Use(middleware.Logger())
