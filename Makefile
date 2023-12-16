@@ -1,8 +1,7 @@
 .PHONY: generate run
 
 generate:
-    templ generate
+	templ generate
 
 run: generate
-    go run server.go
-
+	go run server.go
