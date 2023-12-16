@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"gopkg.in/mgo.v2"
+	"gorm.io/gorm"
 )
 
 type (
 	Handler struct {
-		DB *mgo.Session
+		DB *gorm.DB
 	}
 )
 

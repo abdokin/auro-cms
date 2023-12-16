@@ -2,21 +2,40 @@ package main
 
 import (
 	"auro-cms/handler"
+	"auro-cms/model"
+	"auro-cms/views"
+	"net/http"
+	"io"
+	"github.com/a-h/templ"
+	"github.com/go-playground/validator"
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
-	"gopkg.in/mgo.v2"
-	"auro-cms/views"
-	"context"
-	"os"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
-func main() {
-	component := views.HelloView("Hello World");
-	component.Render(context.Background(), os.Stdout)
+type Template struct {
+	component templ.Component
 }
-func main2() {
+
+type CustomValidator struct {
+	validator *validator.Validate
+}
+
+func (cv *CustomValidator) Validate(i interface{}) error {
+	if err := cv.validator.Struct(i); err != nil {
+	  // Optionally, you could return the error to give each route more control over the status code
+	  return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return nil
+  }
+
+func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.component.Render(c.Request().Context(), w)
+}
+func main() {
 	e := echo.New()
 	e.Logger.SetLevel(log.ERROR)
 	e.Use(middleware.Logger())
@@ -24,37 +43,41 @@ func main2() {
 		SigningKey: []byte(handler.Key),
 		Skipper: func(c echo.Context) bool {
 			// Skip authentication for signup and login requests
-			if c.Path() == "/login" || c.Path() == "/signup" {
+			if c.Path() == "/login" || c.Path() == "/register" || c.Path() == "/" {
 				return true
 			}
 			return false
 		},
 	}))
+	// custome Validator 
+	e.Validator = &CustomValidator{validator: validator.New()}
+
 
 	// Database connection
-	db, err := mgo.Dial("localhost")
+	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
-		e.Logger.Fatal(err)
+		panic("failed to connect database")
 	}
 
-	// Create indices
-	if err = db.Copy().DB("twitter").C("users").EnsureIndex(mgo.Index{
-		Key:    []string{"email"},
-		Unique: true,
-	}); err != nil {
-		log.Fatal(err)
-	}
+	// Migrate the schema
+	db.AutoMigrate(&model.User{})
 
-	// Initialize handler
+	// // Initialize handler
 	h := &handler.Handler{DB: db}
 
-	// Routes
-	e.POST("/signup", h.Signup)
+	// // Routes
+	e.POST("/register", h.Register)
 	e.POST("/login", h.Login)
-	e.POST("/follow/:id", h.Follow)
-	e.POST("/posts", h.CreatePost)
-	e.GET("/feed", h.FetchPost)
+	e.GET("/", func(c echo.Context) error {
+		return views.WelcomePage().Render(c.Request().Context(), c.Response().Writer)
+	})
+	e.GET("/login", func(c echo.Context) error {
+		return views.LoginPage().Render(c.Request().Context(), c.Response().Writer)
+	})
+	e.GET("/register", func(c echo.Context) error {
+		return views.RegisterPage().Render(c.Request().Context(), c.Response().Writer)
+	})
 
 	// Start server
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":8080"))
 }
