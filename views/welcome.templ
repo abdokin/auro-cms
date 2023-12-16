@@ -1,0 +1,17 @@
+package views
+
+templ welcome() {
+	<div class="flex justify-center items-center min-h-screen">
+		<div class="text-center">
+			<h1 class="text-4xl font-bold mb-4">Welcome to Our Platform!</h1>
+			<p class="text-lg text-gray-700 mb-8">Start exploring and enjoy your experience.</p>
+			<a href="/login" class="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Login</a>
+			<span class="mx-2">or</span>
+			<a href="/register" class="px-6 py-3 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition duration-300 ease-in-out">Register</a>
+		</div>
+	</div>
+}
+
+templ WelcomePage() {
+	@guestLayout(welcome(),"auroCMS - Welcome")
+}
