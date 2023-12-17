@@ -1,0 +1,20 @@
+package views
+
+import "auro-cms/model"
+
+templ profile(user model.User) {
+	<div class="flex">
+		<!-- Profile section -->
+		<div class="flex flex-col justify-center items-center bg-gray-200 p-4 rounded-lg">
+			<h1 class="text-2xl font-bold mb-2">{ user.Name }</h1>
+			<h1 class="text-2xl font-bold mb-2">{ user.Email }</h1>
+			<p class="text-gray-600 mb-2">Created at: { user.CreatedAt.String() }</p>
+			<p class="text-gray-600">Updated at: { user.UpdatedAt.String() }</p>
+			<a href="/logout" class="text-blue-500 hover:text-blue-700">Logout</a>
+		</div>
+	</div>
+}
+
+templ ProfilePage(user model.User) {
+	@guestLayout(profile(user),"auroCMS - Profile")
+}
