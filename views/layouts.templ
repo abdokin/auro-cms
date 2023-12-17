@@ -1,5 +1,7 @@
 package views
 
+import "auro-cms/model"
+
 templ heading( title string) {
 	<head>
 		<meta charset="UTF-8"/>
@@ -17,6 +19,59 @@ templ guestLayout(contents templ.Component,title string) {
 			<div class="container mx-auto mt-5">
 				@contents
 			</div>
+		</body>
+	</html>
+}
+
+templ authLayout(contents templ.Component,title string,user model.UserResponse) {
+	<!DOCTYPE html>
+	<html lang="en">
+		@heading(title)
+		<body>
+			<div class="flex h-screen overflow-y-hidden bg-white" x-data="setup()" x-init="$refs.loading.classList.add('hidden')">
+				<!-- Loading screen -->
+				<div
+ 					x-ref="loading"
+ 					class="fixed inset-0 z-50 flex items-center justify-center text-white bg-black bg-opacity-50"
+ 					style="backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px)"
+				>
+					Loading.....
+				</div>
+				<!-- Sidebar backdrop -->
+				<div
+ 					x-show.in.out.opacity="isSidebarOpen"
+ 					class="fixed inset-0 z-10 bg-black bg-opacity-20 lg:hidden"
+ 					style="backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px)"
+				></div>
+				<!-- Sidebar -->
+				@sidebar()
+				<div class="flex flex-col flex-1 h-full overflow-hidden">
+					<!-- Navbar -->
+					@navBar(user)
+					<!-- Main content -->
+					<main class="flex-1 max-h-full p-5 overflow-hidden overflow-y-scroll">
+						@contents
+					</main>
+					<!-- Main footer -->
+					@footer()
+				</div>
+				<!-- Settings panel -->
+				@settings()
+			</div>
+			<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js" defer></script>
+			<script>
+				const setup = () => {
+					return {
+						loading: true,
+						isSidebarOpen: false,
+						toggleSidbarMenu() {
+						this.isSidebarOpen = !this.isSidebarOpen
+						},
+						isSettingsPanelOpen: false,
+						isSearchBoxOpen: false,
+					}
+				}
+			</script>
 		</body>
 	</html>
 }

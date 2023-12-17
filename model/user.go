@@ -25,6 +25,13 @@ type (
 		Email    string `json:"email" form:"email" validate:"required,email"`
 		Password string `json:"password" form:"password" validate:"required,min=6,max=16"`
 	}
+	UserResponse struct {
+		gorm.Model
+		Email    string
+		Name     string
+		Phone    string
+		Password string
+	}
 )
 
 func (u *User) TableName() string {
@@ -37,6 +44,14 @@ func NewUser(req *RegisterRequest) *User {
 		Name:     req.Name,
 		Phone:    req.Phone,
 		Password: req.Password,
+	}
+}
+func NewUserResponse(u *User) UserResponse {
+	return UserResponse{
+		Model: u.Model,
+		Email: u.Email,
+		Name:  u.Name,
+		Phone: u.Phone,
 	}
 }
 

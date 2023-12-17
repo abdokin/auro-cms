@@ -18,7 +18,6 @@ func (h *Handler) Register(c echo.Context) (err error) {
 	if err = c.Bind(user_request); err != nil {
 		return
 	}
-
 	// // Validate
 	errorMap := h.Validator.Validate(user_request)
 	if errorMap != nil {
@@ -48,15 +47,12 @@ func (h *Handler) Logout(c echo.Context) (err error) {
 }
 
 func (h *Handler) Login(c echo.Context) (err error) {
-	// Bind
 	user_request := &model.LoginRequest{}
-
 	if err = c.Bind(user_request); err != nil {
 		return views.LoginPage("Invalid email or password", *user_request).Render(c.Request().Context(), c.Response().Writer)
 	}
 	// // Validate
 	errorMap := h.Validator.Validate(user_request)
-
 	if errorMap != nil {
 		user_request.Password = ""
 		return views.LoginPage("Invalid email or password", *user_request).Render(c.Request().Context(), c.Response().Writer)
@@ -65,6 +61,7 @@ func (h *Handler) Login(c echo.Context) (err error) {
 	// Find user
 	var user = model.User{}
 	if result := h.DB.First(&user, "email =?", user_request.Email); result.Error != nil {
+		user_request.Password = ""
 		return views.LoginPage("Invalid email or password", *user_request).Render(c.Request().Context(), c.Response().Writer)
 	}
 	fmt.Println("user loaded", user)
@@ -77,7 +74,6 @@ func (h *Handler) Login(c echo.Context) (err error) {
 
 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "Something went wrong"}
 	}
-
 	// Set user as authenticated
 	sess.Values[AUTH_KEY] = true
 	sess.Values["id"] = user.ID
@@ -85,7 +81,7 @@ func (h *Handler) Login(c echo.Context) (err error) {
 	sess.Save(c.Request(), c.Response())
 	fmt.Println("auth values :", sess.Values)
 
-	return c.Redirect(http.StatusPermanentRedirect, "/profile")
+	return c.Redirect(http.StatusMovedPermanently, "/profile")
 }
 
 func (h *Handler) Profile(c echo.Context) (err error) {
@@ -97,16 +93,13 @@ func (h *Handler) Profile(c echo.Context) (err error) {
 
 		return h.Logout(c)
 	}
-	return views.ProfilePage(user).Render(c.Request().Context(), c.Response().Writer)
+	return views.ProfilePage(model.NewUserResponse(&user)).Render(c.Request().Context(), c.Response().Writer)
 }
 
 func userIDFromSession(c echo.Context) uint {
-	// Replace 'session' with your actual session retrieval logic
 	sess, _ := session.Get(AUTH_SESSION, c)
-
 	if userID, ok := sess.Values["id"].(uint); ok {
 		return userID
 	}
-	// Return zero or any default value appropriate for your application
 	return 0
 }
