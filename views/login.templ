@@ -1,6 +1,7 @@
 package views
 
 import "auro-cms/model"
+import "auro-cms/components"
 
 templ loginForm(errorMessage string,login_req model.LoginRequest) {
 	// generate login page with tailwind
@@ -12,11 +13,10 @@ templ loginForm(errorMessage string,login_req model.LoginRequest) {
 			<form action="/login" method="POST">
 				<div class="mb-4">
 					<label for="email" class="block text-gray-700">Email Address</label>
-					<input type="email" id="email" value={ login_req.Email } name="email" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
+					@components.Input("email",login_req.Email,"email","","Enter Email Address")
 				</div>
 				<div class="mb-4">
-					<label for="password" class="block text-gray-700">Password</label>
-					<input type="password" id="password" value={ login_req.Password } name="password" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
+					@components.InputWithLabel("password",login_req.Password,"password","","Enter Password")
 				</div>
 				<div class="flex items-center justify-between">
 					<button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Login</button>

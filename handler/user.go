@@ -81,7 +81,7 @@ func (h *Handler) Login(c echo.Context) (err error) {
 	sess.Save(c.Request(), c.Response())
 	fmt.Println("auth values :", sess.Values)
 
-	return c.Redirect(http.StatusMovedPermanently, "/profile")
+	return c.Redirect(http.StatusMovedPermanently, "/dashboard/profile")
 }
 
 func (h *Handler) Profile(c echo.Context) (err error) {
@@ -96,6 +96,13 @@ func (h *Handler) Profile(c echo.Context) (err error) {
 	return views.ProfilePage(model.NewUserResponse(&user)).Render(c.Request().Context(), c.Response().Writer)
 }
 
+func (h *Handler) RegisterPage(c echo.Context) error {
+	return views.RegisterPage(nil, model.RegisterRequest{}).Render(c.Request().Context(), c.Response().Writer)
+}
+
+func (h *Handler) LoginPage(c echo.Context) error {
+	return views.LoginPage("", model.LoginRequest{}).Render(c.Request().Context(), c.Response().Writer)
+}
 func userIDFromSession(c echo.Context) uint {
 	sess, _ := session.Get(AUTH_SESSION, c)
 	if userID, ok := sess.Values["id"].(uint); ok {

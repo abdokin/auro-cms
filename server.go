@@ -2,9 +2,7 @@ package main
 
 import (
 	"auro-cms/config"
-	"auro-cms/model"
 	"auro-cms/views"
-
 	"github.com/labstack/echo/v4"
 )
 
@@ -15,19 +13,18 @@ func main() {
 	// // Routes
 	e.POST("/register", h.Register)
 	e.POST("/login", h.Login)
-	e.GET("/profile", h.Profile)
-	e.POST("/profile", h.Profile)
-
-	e.GET("/", func(c echo.Context) error {
-		return views.WelcomePage().Render(c.Request().Context(), c.Response().Writer)
-	})
-	e.GET("/login", func(c echo.Context) error {
-		return views.LoginPage("", model.LoginRequest{}).Render(c.Request().Context(), c.Response().Writer)
-	})
-	e.GET("/register", func(c echo.Context) error {
-		return views.RegisterPage(nil, model.RegisterRequest{}).Render(c.Request().Context(), c.Response().Writer)
-	})
+	e.GET("/login", h.LoginPage)
+	e.GET("/register", h.RegisterPage)
 	e.GET("/logout", h.Logout)
+	e.GET("/", func(c echo.Context) error {
+		return views.WelcomePage(false).Render(c.Request().Context(), c.Response().Writer)
+	})
+	// dashboard
+	e.GET("/dashboard/profile", h.Profile)
+	e.POST("/dashboard/profile", h.Profile)
+	e.GET("/", func(c echo.Context) error {
+		return views.WelcomePage(false).Render(c.Request().Context(), c.Response().Writer)
+	})
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
 }

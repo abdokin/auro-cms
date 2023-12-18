@@ -5,6 +5,11 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	AUTH_SESSION = "authenticate-sessions"
+	AUTH_KEY = "authenticated"
+
+)
 type (
 	Handler struct {
 		DB        *gorm.DB
