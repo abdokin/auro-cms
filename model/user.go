@@ -15,6 +15,7 @@ type (
 		Password string `json:"password,omitempty"`
 	}
 
+	
 	RegisterRequest struct {
 		Email    string `json:"email" form:"email" validate:"required,email"`
 		Name     string `json:"name" form:"name" validate:"required,min=2,max=32"`

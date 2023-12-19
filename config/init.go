@@ -35,7 +35,7 @@ func Init_server() *echo.Echo {
 	// e.Use(echo_middleware.Logger())
 	e.Use(echo_middleware.RequestID())
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
-	e.Use(middleware.Auth)
+	e.Use(middleware.WithAuth)
 
 	// custome Validator
 	// e.Validator = &CustomValidator{validator: validator.New()}

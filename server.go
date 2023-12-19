@@ -2,7 +2,7 @@ package main
 
 import (
 	"auro-cms/config"
-	"auro-cms/views"
+	"auro-cms/views/pages"
 	"github.com/labstack/echo/v4"
 )
 
@@ -17,14 +17,15 @@ func main() {
 	e.GET("/register", h.RegisterPage)
 	e.GET("/logout", h.Logout)
 	e.GET("/", func(c echo.Context) error {
-		return views.WelcomePage(false).Render(c.Request().Context(), c.Response().Writer)
+		return pages.WelcomePage(false).Render(c.Request().Context(), c.Response().Writer)
 	})
 	// dashboard
 	e.GET("/dashboard/profile", h.Profile)
-	e.POST("/dashboard/profile", h.Profile)
-	e.GET("/", func(c echo.Context) error {
-		return views.WelcomePage(false).Render(c.Request().Context(), c.Response().Writer)
-	})
+	e.GET("/", h.WelcomePage)
+	e.GET("/dashboard", h.DashboardPage)
+	e.GET("/dashboard/users", h.UsersPage)
+
+
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
 }
