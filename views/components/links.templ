@@ -1,0 +1,18 @@
+package components
+
+templ Link(path string, label string, icon templ.Component) {
+	<li>
+		<a
+ 			href={ templ.SafeURL(path) }
+ 			class="flex items-center p-2 space-x-2 rounded-md hover:bg-gray-100"
+ 			:class="{'justify-c˝enter': !isSidebarOpen}"
+		>
+			<span>
+                @icon
+			</span>
+			<span :class="{ 'lg:hidden': !isSidebarOpen }">{ label }</span>
+		</a>
+	</li>
+}
+
+

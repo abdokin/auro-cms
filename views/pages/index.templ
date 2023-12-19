@@ -1,0 +1,17 @@
+package pages
+
+import "auro-cms/views/layouts"
+import "auro-cms/model"
+
+templ index() {
+	<div class="flex justify-center items-center min-h-screen">
+		<div class="text-center">
+			<h1 class="text-4xl font-bold mb-4">Welcome to Our Platform!</h1>
+			<p class="text-lg text-gray-700 mb-8">Start exploring and enjoy your experience.</p>
+		</div>
+	</div>
+}
+
+templ DashboardPage(user model.UserResponse) {
+	@layouts.Secured(index(),"auroCMS - Welcome",user)
+}

@@ -1,0 +1,17 @@
+package pages
+
+import "auro-cms/views/layouts"
+import "auro-cms/model"
+
+templ usersList(users []model.User) {
+	<h2>Users Page</h2>
+	<ul>
+		for _, user := range users {
+			<li>{ user.Email } - { user.Name }</li>
+		}
+	</ul>
+}
+
+templ UsersPage(user model.UserResponse,users []model.User) {
+	@layouts.Secured(usersList(users),"Users - Auro-cms",user)
+}
