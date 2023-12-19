@@ -1,0 +1,17 @@
+
+package layouts
+import "auro-cms/views/shared"
+
+
+
+templ Base(contents templ.Component,title string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		@shared.Heading(title)
+		<body>
+			<div class="container mx-auto mt-5">
+				@contents
+			</div>
+		</body>
+	</html>
+}

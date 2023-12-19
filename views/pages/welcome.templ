@@ -1,4 +1,6 @@
-package views
+package pages
+
+import "auro-cms/views/layouts"
 
 templ welcome(isLoggedIn bool) {
 	<div class="flex justify-center items-center min-h-screen">
@@ -19,5 +21,5 @@ templ welcome(isLoggedIn bool) {
 }
 
 templ WelcomePage(isLoggedIn bool) {
-	@guestLayout(welcome(isLoggedIn),"auroCMS - Welcome")
+	@layouts.Base(welcome(isLoggedIn),"auroCMS - Welcome")
 }

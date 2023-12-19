@@ -1,7 +1,8 @@
-package views
+package pages
 
 import "auro-cms/model"
-import "auro-cms/components"
+import "auro-cms/views/components"
+import "auro-cms/views/layouts"
 
 templ loginForm(errorMessage string,login_req model.LoginRequest) {
 	// generate login page with tailwind
@@ -28,5 +29,5 @@ templ loginForm(errorMessage string,login_req model.LoginRequest) {
 }
 
 templ LoginPage(errorMessage string,login_req model.LoginRequest) {
-	@guestLayout(loginForm(errorMessage,login_req),"auroCMS -Login")
+	@layouts.Base(loginForm(errorMessage,login_req),"auroCMS -Login")
 }

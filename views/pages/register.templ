@@ -1,6 +1,7 @@
-package views
+package pages
 
 import "auro-cms/model"
+import "auro-cms/views/layouts"
 
 templ registerForm(errorMape map[string]string,register_request model.RegisterRequest) {
 	// Generate registration form with Tailwind
@@ -38,5 +39,5 @@ templ registerForm(errorMape map[string]string,register_request model.RegisterRe
 }
 
 templ RegisterPage(errorMap map[string]string,register_request model.RegisterRequest) {
-	@guestLayout(registerForm(errorMap,register_request ),"auroCMS - Register")
+	@layouts.Base(registerForm(errorMap,register_request ),"auroCMS - Register")
 }

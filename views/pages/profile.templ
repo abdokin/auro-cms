@@ -1,6 +1,7 @@
-package views
+package pages
 
 import "auro-cms/model"
+import "auro-cms/views/layouts"
 
 templ profile(user model.UserResponse) {
 	<section class="pt-16 bg-blueGray-50">
@@ -71,5 +72,5 @@ templ profile(user model.UserResponse) {
 }
 
 templ ProfilePage(user model.UserResponse) {
-	@authLayout(profile(user),"auroCMS - Profile",user)
+	@layouts.Secured(profile(user),"auroCMS - Profile",user)
 }

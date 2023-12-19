@@ -1,8 +1,8 @@
-package views
+package shared
 
 import "auro-cms/model"
 
-templ navBar(user model.UserResponse) {
+templ NavBar(user model.UserResponse) {
 	<header class="flex-shrink-0 border-b">
 		<div class="flex items-center justify-between p-2">
 			<!-- Navbar left -->
@@ -119,10 +119,10 @@ templ navBar(user model.UserResponse) {
 				</button>
 				<div class="items-center hidden space-x-3 md:flex">
 					<!-- Notification Button -->
-					@notifications()
+					@Notifications()
 				</div>
 				<!-- avatar button -->
-				@userCard(user)
+				@UserCard(user)
 			</div>
 		</div>
 	</header>
